@@ -1,0 +1,53 @@
+version: '3.2'
+services:
+  catalogos:
+    image: "hlp_catalogos:1806201715.1.0-dev"
+    ports:
+     - "8091:8091"
+    environment:
+      - DB_USER_NAME=administrador
+      - DB_USER_PASSWORD=desa2018rrollo
+      - DB_URL=192.168.70.166
+      - DB_PORT=5433
+      - DB_NAME=desarrollo
+    networks:
+        mynet:
+          ipv4_address: 172.19.1.1
+
+  tickets:
+    image: "hlp_tickets:1806201715.1.0-dev"
+    ports:
+     - "8092:8092"
+    environment:
+      - DB_USER_NAME=administrador
+      - DB_USER_PASSWORD=desa2018rrollo
+      - DB_URL=192.168.70.166
+      - DB_PORT=5433
+      - DB_NAME=desarrollo
+    network_mode: service:catalogos
+
+  notificaciones:
+    image: "hlp_notificaciones:1806201715.1.0-dev"
+    ports:
+     - "8093:8093"
+    environment:
+      - DB_USER_NAME=administrador
+      - DB_USER_PASSWORD=desa2018rrollo
+      - DB_URL=192.168.70.166
+      - DB_PORT=5433
+      - DB_NAME=desarrollo
+      - MAIL_HOST=mail.galvan-apps.com
+      - MAIL_USERNAME=desarrollo@galvan-apps.com
+      - MAIL_PASSWORD=x302$W
+      - MAIL_PORT=26
+      - MAIL_TRANSPORT_PROTOCOL=smtp
+      - MAIL_SMTP_PORT=26
+    network_mode: service:catalogos
+
+networks:
+    mynet:
+      driver: bridge
+      ipam:
+        driver: default
+        config:
+        - subnet: 172.19.0.0/16
